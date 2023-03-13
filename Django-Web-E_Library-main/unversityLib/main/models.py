@@ -26,3 +26,23 @@ class Keyword(models.Model):
         verbose_name = 'Ключевое слово'
         verbose_name_plural = 'Ключевые слова'
 
+class Books(models.Model):
+    book_full_name = models.TextField('Полное Название книги (год издания/автор)')
+    book_short_name = models.TextField('Название книги (Заголовок)')
+
+    book_annotation = models.TextField('Аннотация из книги')
+
+    authors = models.ManyToManyField(Author, verbose_name="Авторы")
+    pages_number = models.IntegerField(verbose_name='Кол-во страниц')
+    year = models.IntegerField(validators=[MinValueValidator(1984), max_value_current_year], verbose_name='Год издания')
+    keywords = models.ManyToManyField(Keyword, verbose_name="Ключевые слова")
+    file = models.FileField(upload_to='unversityLib/static/books/', verbose_name='Файл (эл.Пособие)')
+
+    enter_date = models.DateField(default=utils.timezone.now, verbose_name='Дата загрузки книги')
+
+    def __str__(self):
+        return self.book_short_name
+
+    class Meta:
+        verbose_name = 'Книга'
+        verbose_name_plural = 'Книги'
