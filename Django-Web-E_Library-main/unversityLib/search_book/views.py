@@ -47,6 +47,28 @@ def authors_for_menu_dropdown():
 
     return authors_block
 
+def show_book(request, book_id):
+    CSS_BOOK_COVER_PATH = "img/books_covers_imgs/"
+
+    book = Books.objects.get(pk=book_id)
+    book_file_name = book.file.name.split('/')[-1]
+    print(book_file_name)
+    book_format = book_file_name.split('.')[-1]
+    file_size = os.path.getsize(book.file.name) / (1024 * 1024)
+    file_size = float(f'{file_size:.2f}')
+
+    image_name = book_file_name.replace('.pdf', '') + '.png'
+    book_cover = CSS_BOOK_COVER_PATH + image_name
+
+    return render(request, 'book_info_page/book_info.html', {'book_obj': book,
+                                                             'book_file_name': book_file_name,
+                                                             'keywords_block': keywords_for_menu_dropdown(),
+                                                             'authors_block': authors_for_menu_dropdown(),
+                                                             'book_format': book_format,
+                                                             'file_size': file_size,
+                                                             'book_cover_path': book_cover})
+
+
 
 def books_pack(book):
     IMAGES_PATH = f'unversityLib\\static\\img\\books_covers_imgs\\'
